@@ -1,4 +1,5 @@
-FROM node:lts-alpine AS runtime
+FROM node:lts-alpine AS build
+
 WORKDIR /app
 COPY . .
 RUN npm i
