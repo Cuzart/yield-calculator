@@ -1,0 +1,38 @@
+---
+"use client";
+import Layout from '../layouts/Layout.astro';
+import {YieldForm} from '@/components/YieldForm.tsx';
+import "@/styles/global.css"
+import {Button} from "@/components/ui/button"
+import {Input} from "@/components/ui/input"
+
+---
+
+<Layout title="Rendite Rechner">
+	<main>
+		<h1 >Rendite Rechner</h1>
+    <YieldForm client:load />
+	</main>
+</Layout>
+
+<style>
+  h1 {
+		font-size: 4rem;
+		font-weight: 700;
+		line-height: 1;
+		text-align: center;
+		margin-bottom: 1em;
+    color: rgb(5, 5, 5)
+
+	}
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 800px;
+		max-width: calc(100% - 2rem);
+		font-size: 20px;
+		line-height: 1.6;
+    min-height: 100vh;
+	}
+
+</style>
