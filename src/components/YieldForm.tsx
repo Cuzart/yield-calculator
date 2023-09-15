@@ -199,7 +199,7 @@ export const YieldForm = () => {
                       {...field}
                       {...commonInputProps}
                       onChange={(e) => {
-                        field.onChange(parseInt(e.target.value));
+                        field.onChange(parseFloat(e.target.value));
                       }}
                     />
                     <IconPercentage {...commonIconProps} />

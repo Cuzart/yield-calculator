@@ -61,3 +61,31 @@ form input {
     @apply bg-background text-foreground;
   }
 }
+
+.interest-table td:first-of-type {
+  opacity: 0.6;
+  padding-right: 2rem;
+}
+
+.interest-table td:last-of-type {
+  text-align: end;
+}
+
+.interest-table tr:last-of-type {
+  border-top: 1px solid #20293a;
+  font-weight: bold;
+}
+.interest-table tr:nth-last-child(2) td {
+  padding-bottom: 0.5rem;
+}
+.interest-table tr:last-of-type td {
+  padding-top: 0.5rem;
+}
+
+.card-active {
+  opacity: 1;
+}
+
+.card-hidden {
+  opacity: 0;
+}
