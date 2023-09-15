@@ -1,8 +1,9 @@
-'use client';
+import React, { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-
+import '../styles/global.css';
+import { Slider } from '@/components/ui/slider';
 import {
   Form,
   FormControl,
@@ -13,138 +14,247 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
-import { useEffect, useMemo, useState } from 'react';
-
-const formSchema = z.object({
-  starterCapital: z.number().positive().nullable(),
-  period: z.enum(['jährlich', 'monatlich', 'wöchentlich']),
-  duration: z.number().positive().max(100),
-  savingSum: z.number().positive(),
-  interest: z.number().positive(),
-  distributionForm: z.enum(['ausschüttend', 'thesaurierend']),
-});
+import { IconCurrencyEuro, IconPercentage, IconCalendar } from '@tabler/icons-react';
+import { CalculationCard } from '@/components/CalculationCard';
 
 export const YieldForm = () => {
-  // 1. Define your form.
+  const formSchema = z.object({
+    starterCapital: z
+      .number({
+        invalid_type_error: 'Bitte gib eine Zahl an',
+      })
+      .nonnegative()
+      .int(),
+    duration: z
+      .number({
+        invalid_type_error: 'Bitte gib eine Zahl an',
+      })
+      .nonnegative()
+      .max(100, 'Länger als 100 Jahre? Das glaub ich nicht...')
+      .int(),
+    savingSum: z
+      .number({
+        invalid_type_error: 'Bitte gib eine Zahl an',
+      })
+      .int(),
+    interest: z
+      .number({
+        invalid_type_error: 'Bitte gib eine Zahl an',
+      })
+      .max(100, 'Mehr als 100% Rendite? Das glaub ich nicht...')
+      .nonnegative(),
+  });
   const form = useForm<z.infer<typeof formSchema>>({
+    mode: 'onChange',
+    revalidateMode: 'onChange',
     resolver: zodResolver(formSchema),
     defaultValues: {
-      starterCapital: undefined,
-      period: undefined,
-      duration: undefined,
-      savingSum: undefined,
-      interest: undefined,
-      distributionForm: undefined,
+      starterCapital: 0,
+      duration: 5,
+      savingSum: 100,
+      interest: 7.0,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(112, values);
-  }
+  const { starterCapital, savingSum, interest, duration } = form.watch();
+  const [result, setResult] = useState(0);
+  const [interestSum, setInterestSum] = useState(0);
 
-  const result = useMemo(() => {
-    console.log(23, form.getValues('starterCapital'));
-    return (
-      form.getValues('starterCapital') ||
-      0 +
-        form.getValues('savingSum') *
-          (1 + form.getValues('interest') / 100) ** form.getValues('duration')
-    );
-  }, [form.getValues('starterCapital'), form.getValues('savingSum'), form.getValues('interest')]);
-
-  console.log(form.getValues('starterCapital'));
-
+  // set prefered color scheme
   useEffect(() => {
-    console.log('first');
+    document.documentElement.classList.add('dark');
   }, []);
 
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 max-w-md mx-auto'>
-        <FormField
-          control={form.control}
-          name='starterCapital'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Startkapital</FormLabel>
-              <FormControl>
-                <Input type='number' placeholder='Startkapital' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='period'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Periode</FormLabel>
-              <FormControl>
-                <Input type='number' placeholder='Periode' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='interest'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Zinssatz</FormLabel>
-              <FormControl>
-                <Input type='number' placeholder='Zinssatz' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='duration'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Anlagedauer (Jahre)</FormLabel>
-              <FormControl>
-                <Input type='number' placeholder='Anlagedauer (Jahre)' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='distributionForm'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Anlageform</FormLabel>
-              <FormControl>
-                <Input type='number' placeholder='Anlageform' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='savingSum'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Sparbetrag</FormLabel>
-              <FormControl>
-                <Input type='number' placeholder='Sparbetrag' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <button type='button' onClick={() => onSubmit(form.getValues())}>
-          submit
-        </button>
-      </form>
+  console.log(form);
+  // calculation
+  useEffect(() => {
+    let sum = starterCapital;
+    for (let i = 0; i < duration; i++) {
+      let x = 0;
+      for (let j = 0; j < 12; j++) {
+        sum += savingSum;
+        x += sum * (interest / 100 / 12);
+      }
+      sum += x;
+    }
 
-      <div>Ergebnis {result}</div>
-    </Form>
+    let withoutInterest = starterCapital + 12 * duration * savingSum;
+    setInterestSum(sum - withoutInterest);
+    setResult(sum);
+  }, [starterCapital, savingSum, interest, duration]);
+
+  const handleCapitalStep = (value: number) => {
+    if (value > 50000) return 10000;
+    if (value > 25000) return 5000;
+    if (value > 5000) return 1000;
+    if (value > 500) return 100;
+    return 50;
+  };
+  const handleRateStep = (value: number) => {
+    if (value > 300) return 100;
+    if (value > 100) return 50;
+    return 10;
+  };
+
+  const commonInputProps = {
+    className: 'pr-10',
+    type: 'number',
+    onFocus: (e: React.FocusEvent<HTMLInputElement>) => {
+      e.target.select();
+    },
+  };
+
+  const commonIconProps = {
+    className: 'h-4 w-4 opacity-80',
+    style: {
+      position: 'absolute',
+      right: 12,
+      top: '50%',
+      transform: 'translateY(-50%)',
+    },
+  };
+
+  return (
+    <>
+      <Form {...form}>
+        <form className='space-y-3 max-w-xl mx-auto'>
+          <FormField
+            control={form.control}
+            name='starterCapital'
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Startkapital</FormLabel>
+                  <FormControl>
+                    <div style={{ position: 'relative' }}>
+                      <Input
+                        placeholder='Startkapital'
+                        step={handleCapitalStep(starterCapital)}
+                        {...field}
+                        {...commonInputProps}
+                        onChange={(e) => {
+                          field.onChange(parseInt(e.target.value));
+                        }}
+                      />
+                      <IconCurrencyEuro {...commonIconProps} />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          {starterCapital > 0 && (
+            <Slider
+              defaultValue={[starterCapital]}
+              max={60000}
+              step={handleCapitalStep(starterCapital)}
+              onValueChange={(value) => form.setValue('starterCapital', value[0])}
+            />
+          )}
+
+          <FormField
+            control={form.control}
+            name='savingSum'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Monatliche Sparrate</FormLabel>
+                <FormControl>
+                  <div style={{ position: 'relative' }}>
+                    <Input
+                      placeholder='Monatliche Sparrate'
+                      step={handleRateStep(savingSum)}
+                      {...field}
+                      {...commonInputProps}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value));
+                      }}
+                    />
+                    <IconCurrencyEuro {...commonIconProps} />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {savingSum > 0 && (
+            <Slider
+              defaultValue={[savingSum]}
+              max={3000}
+              step={handleRateStep(savingSum)}
+              onValueChange={(value) => form.setValue('savingSum', value[0])}
+            />
+          )}
+
+          <FormField
+            control={form.control}
+            name='interest'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Jährliche Rendite</FormLabel>
+                <FormControl>
+                  <div style={{ position: 'relative' }}>
+                    <Input
+                      placeholder='Jährliche Rendite'
+                      {...field}
+                      {...commonInputProps}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value));
+                      }}
+                    />
+                    <IconPercentage {...commonIconProps} />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {interest > 0 && (
+            <Slider
+              defaultValue={[interest]}
+              max={20}
+              step={1}
+              onValueChange={(value) => form.setValue('interest', value[0])}
+            />
+          )}
+          <FormField
+            control={form.control}
+            name='duration'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Anlagedauer (Jahre)</FormLabel>
+                <FormControl>
+                  <div style={{ position: 'relative' }}>
+                    <Input
+                      placeholder='Anlagedauer (Jahre)'
+                      {...field}
+                      {...commonInputProps}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value));
+                      }}
+                    />
+                    <IconCalendar {...commonIconProps} />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {duration > 0 && (
+            <Slider
+              defaultValue={[duration]}
+              max={100}
+              step={1}
+              min={1}
+              onValueChange={(value) => form.setValue('duration', value[0])}
+            />
+          )}
+
+          {result > 0 && (
+            <CalculationCard interestSum={interestSum} result={result} duration={duration} />
+          )}
+        </form>
+      </Form>
+    </>
   );
 };
