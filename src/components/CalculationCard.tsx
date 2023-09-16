@@ -39,7 +39,7 @@ export const CalculationCard = ({
     <>
       <Card
         className={
-          'absolute right-8 bottom-8 z-50 transition-all duration-2000 delay-200' +
+          'fixed right-8 bottom-8 z-50 transition-all duration-2000 delay-200' +
           (clipboard.copied ? ' opacity-1 translate-y-0' : ' opacity-0 translate-y-4')
         }
       >
@@ -111,25 +111,27 @@ export const CalculationCard = ({
                     </TooltipTrigger>
                     <TooltipContent>
                       <table className={'interest-table'}>
-                        <tr>
-                          <td>Gewinn</td>
-                          <td>{formatter.format(interestSum)}€</td>
-                        </tr>
+                        <tbody>
+                          <tr>
+                            <td>Gewinn</td>
+                            <td>{formatter.format(interestSum)}€</td>
+                          </tr>
 
-                        <tr>
-                          <td>nach Teilfreistellung (30%)</td>
-                          <td>{formatter.format(interestSum * 0.7)}€</td>
-                        </tr>
+                          <tr>
+                            <td>nach Teilfreistellung (30%)</td>
+                            <td>{formatter.format(interestSum * 0.7)}€</td>
+                          </tr>
 
-                        <tr>
-                          <td>Kapitalertragsteuer (~26%)</td>
-                          <td>{formatter.format(interestSum * 0.7 * 0.26)}€</td>
-                        </tr>
+                          <tr>
+                            <td>Kapitalertragsteuer (~26%)</td>
+                            <td>{formatter.format(interestSum * 0.7 * 0.26)}€</td>
+                          </tr>
 
-                        <tr>
-                          <td>Netto Gewinn</td>
-                          <td>{formatter.format(interestSum - interestSum * 0.7 * 0.26)}€</td>
-                        </tr>
+                          <tr>
+                            <td>Netto Gewinn</td>
+                            <td>{formatter.format(interestSum - interestSum * 0.7 * 0.26)}€</td>
+                          </tr>
+                        </tbody>
                       </table>
                     </TooltipContent>
                   </Tooltip>

@@ -24,7 +24,8 @@ export const YieldForm = () => {
         invalid_type_error: 'Bitte gib eine Zahl an',
       })
       .nonnegative()
-      .int(),
+      .int()
+      .nullable(),
     duration: z
       .number({
         invalid_type_error: 'Bitte gib eine Zahl an',
@@ -65,7 +66,6 @@ export const YieldForm = () => {
     document.documentElement.classList.add('dark');
   }, []);
 
-  console.log(form);
   // calculation
   useEffect(() => {
     let sum = starterCapital;
