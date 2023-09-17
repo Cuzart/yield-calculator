@@ -97,8 +97,8 @@ export const YieldForm = () => {
   };
 
   const commonInputProps = {
-    className: 'pr-10',
     type: 'number',
+    className: 'pr-10',
     onFocus: (e: React.FocusEvent<HTMLInputElement>) => {
       e.target.select();
     },
@@ -133,7 +133,7 @@ export const YieldForm = () => {
                         {...field}
                         {...commonInputProps}
                         onChange={(e) => {
-                          field.onChange(parseInt(e.target.value));
+                          field.onChange(parseInt(e.target.value) || 0);
                         }}
                       />
                       <IconCurrencyEuro {...commonIconProps} />
@@ -147,9 +147,9 @@ export const YieldForm = () => {
           {starterCapital > 0 && (
             <Slider
               defaultValue={[starterCapital]}
-              max={60000}
-              step={handleCapitalStep(starterCapital)}
-              onValueChange={(value) => form.setValue('starterCapital', value[0])}
+              // max={60000}
+              // step={handleCapitalStep(starterCapital)}
+              // onValueChange={(value) => form.setValue('starterCapital', value[0])}
             />
           )}
 
