@@ -133,7 +133,7 @@ export const YieldForm = () => {
                         {...field}
                         {...commonInputProps}
                         onChange={(e) => {
-                          field.onChange(parseInt(e.target.value) || 0);
+                          field.onChange(parseInt(e.target.value));
                         }}
                       />
                       <IconCurrencyEuro {...commonIconProps} />

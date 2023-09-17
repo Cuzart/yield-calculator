@@ -136,14 +136,18 @@ export const CalculationCard = ({
                     </TooltipContent>
                   </Tooltip>
 
-                  <p className='text-sm ' style={{ color: '#6BD09E' }}>
-                    +
-                    {(
-                      (debouncedInterestSum / (debouncedResult - debouncedInterestSum)) *
-                      100
-                    ).toFixed()}
-                    %
-                  </p>
+                  {debouncedInterestSum > 0 ? (
+                    <p className='text-sm ' style={{ color: '#6BD09E' }}>
+                      +
+                      {(
+                        (debouncedInterestSum / (debouncedResult - debouncedInterestSum)) *
+                        100
+                      ).toFixed()}
+                      %
+                    </p>
+                  ) : (
+                    <p className='text-sm opacity-50'>Keine Rendite</p>
+                  )}
                 </CardContent>
               </Card>
               <Card>
