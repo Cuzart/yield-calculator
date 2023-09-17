@@ -147,9 +147,9 @@ export const YieldForm = () => {
           {starterCapital > 0 && (
             <Slider
               defaultValue={[starterCapital]}
-              // max={60000}
-              // step={handleCapitalStep(starterCapital)}
-              // onValueChange={(value) => form.setValue('starterCapital', value[0])}
+              max={60000}
+              step={handleCapitalStep(starterCapital)}
+              onValueChange={(value) => form.setValue('starterCapital', value[0])}
             />
           )}
 
@@ -199,7 +199,7 @@ export const YieldForm = () => {
                       {...field}
                       {...commonInputProps}
                       onChange={(e) => {
-                        field.onChange(parseFloat(e.target.value));
+                        field.onChange(parseFloat(e.target.value.replace(',', '.')));
                       }}
                     />
                     <IconPercentage {...commonIconProps} />
