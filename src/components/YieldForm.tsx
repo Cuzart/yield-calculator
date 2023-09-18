@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { IconCurrencyEuro, IconPercentage, IconCalendar } from '@tabler/icons-react';
 import { CalculationCard } from '@/components/CalculationCard';
+import { useViewportSize } from '@mantine/hooks';
 
 export const YieldForm = () => {
   const formSchema = z.object({
@@ -24,8 +25,7 @@ export const YieldForm = () => {
         invalid_type_error: 'Bitte gib eine Zahl an',
       })
       .nonnegative()
-      .int()
-      .nullable(),
+      .int(),
     duration: z
       .number({
         invalid_type_error: 'Bitte gib eine Zahl an',
@@ -39,15 +39,14 @@ export const YieldForm = () => {
       })
       .int(),
     interest: z
-      .number({
-        invalid_type_error: 'Bitte gib eine Zahl an',
-      })
-      .max(100, 'Mehr als 100% Rendite? Das glaub ich nicht...')
-      .nonnegative(),
+      .any()
+      .refine(
+        (value) => /^(0*100{1,1}\.?((?<=\.)0*)?%?$)|(^0*\d{0,2}\.?((?<=\.)\d*)?)$/.test(value),
+        'Bitte gib einen positiven Prozentwert an'
+      ),
   });
   const form = useForm<z.infer<typeof formSchema>>({
     mode: 'onChange',
-    revalidateMode: 'onChange',
     resolver: zodResolver(formSchema),
     defaultValues: {
       starterCapital: 0,
@@ -73,7 +72,7 @@ export const YieldForm = () => {
       let x = 0;
       for (let j = 0; j < 12; j++) {
         sum += savingSum;
-        x += sum * (interest / 100 / 12);
+        x += sum * (parseFloat(interest) / 100 / 12);
       }
       sum += x;
     }
@@ -114,10 +113,12 @@ export const YieldForm = () => {
     },
   };
 
+  const { width } = useViewportSize();
+  const isMobile = width < 500;
   return (
     <>
       <Form {...form}>
-        <form className='space-y-3 max-w-xl mx-auto'>
+        <div className='space-y-3 max-w-xl mx-auto'>
           <FormField
             control={form.control}
             name='starterCapital'
@@ -144,7 +145,8 @@ export const YieldForm = () => {
               );
             }}
           />
-          {starterCapital > 0 && (
+
+          {starterCapital > 0 && !isMobile && (
             <Slider
               defaultValue={[starterCapital]}
               max={60000}
@@ -177,7 +179,7 @@ export const YieldForm = () => {
               </FormItem>
             )}
           />
-          {savingSum > 0 && (
+          {savingSum > 0 && !isMobile && (
             <Slider
               defaultValue={[savingSum]}
               max={3000}
@@ -198,10 +200,9 @@ export const YieldForm = () => {
                       placeholder='Jährliche Rendite'
                       {...field}
                       {...commonInputProps}
-                      onChange={(e) => {
-                        field.onChange(parseFloat(e.target.value.replace(',', '.')));
-                      }}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
+
                     <IconPercentage {...commonIconProps} />
                   </div>
                 </FormControl>
@@ -209,11 +210,11 @@ export const YieldForm = () => {
               </FormItem>
             )}
           />
-          {interest > 0 && (
+
+          {interest > 0 && !isMobile && (
             <Slider
               defaultValue={[interest]}
               max={20}
-              step={1}
               onValueChange={(value) => form.setValue('interest', value[0])}
             />
           )}
@@ -240,7 +241,7 @@ export const YieldForm = () => {
               </FormItem>
             )}
           />
-          {duration > 0 && (
+          {duration > 0 && !isMobile && (
             <Slider
               defaultValue={[duration]}
               max={100}
@@ -253,7 +254,7 @@ export const YieldForm = () => {
           {result > 0 && (
             <CalculationCard interestSum={interestSum} result={result} duration={duration} />
           )}
-        </form>
+        </div>
       </Form>
     </>
   );
