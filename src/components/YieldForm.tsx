@@ -101,6 +101,7 @@ export const YieldForm = () => {
     onFocus: (e: React.FocusEvent<HTMLInputElement>) => {
       e.target.select();
     },
+    onWheel: (e: any) => e.target.blur(),
   };
 
   const commonIconProps = {
