@@ -109,6 +109,10 @@ export const YieldForm = () => {
     },
   };
 
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
+
   const { width } = useViewportSize();
   const isMobile = width < 500;
   return (
