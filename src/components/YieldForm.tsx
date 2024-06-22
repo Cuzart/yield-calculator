@@ -60,11 +60,6 @@ export const YieldForm = () => {
   const [result, setResult] = useState(0);
   const [interestSum, setInterestSum] = useState(0);
 
-  // set prefered color scheme
-  useEffect(() => {
-    document.documentElement.classList.add('dark');
-  }, []);
-
   // calculation
   useEffect(() => {
     let sum = starterCapital;
@@ -117,9 +112,9 @@ export const YieldForm = () => {
   const { width } = useViewportSize();
   const isMobile = width < 500;
   return (
-    <>
+    <div className='flex gap-10 justify-between flex-col md:flex-row mt-10'>
       <Form {...form}>
-        <div className='space-y-3 max-w-xl mx-auto'>
+        <div className='space-y-3 max-w-xl '>
           <FormField
             control={form.control}
             name='starterCapital'
@@ -251,12 +246,11 @@ export const YieldForm = () => {
               onValueChange={(value) => form.setValue('duration', value[0])}
             />
           )}
-
-          {result > 0 && (
-            <CalculationCard interestSum={interestSum} result={result} duration={duration} />
-          )}
         </div>
       </Form>
-    </>
+      {result > 0 && (
+        <CalculationCard interestSum={interestSum} result={result} duration={duration} />
+      )}
+    </div>
   );
 };

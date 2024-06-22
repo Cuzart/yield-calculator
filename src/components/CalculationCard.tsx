@@ -1,11 +1,11 @@
-import React, { useRef, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Chart } from './Chart';
-import CountUp from 'react-countup';
-import { useDebouncedValue, useClipboard } from '@mantine/hooks';
-import { IconCheck } from '@tabler/icons-react';
 import '@/styles/global.css';
+import { useClipboard, useDebouncedValue } from '@mantine/hooks';
+import { IconCheck } from '@tabler/icons-react';
+import { useEffect, useRef } from 'react';
+import CountUp from 'react-countup';
+import { Chart } from './Chart';
 
 const formatter = new Intl.NumberFormat('de-DE', {
   style: 'decimal',
@@ -51,7 +51,7 @@ export const CalculationCard = ({
       </Card>
 
       <TooltipProvider>
-        <Card style={{ margin: '50px 0px' }}>
+        <Card style={{ margin: '10px 0px' }}>
           <CardHeader>
             <CardTitle>Deine Prognosse</CardTitle>
           </CardHeader>
