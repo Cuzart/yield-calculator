@@ -5,6 +5,7 @@ import { YieldForm } from '@/components/YieldForm';
 import "@/styles/global.css";
 import '@fontsource-variable/dm-sans';
 import Layout from '../layouts/Layout.astro';
+import {Footer} from '@/components/Footer/Footer';
 
 ---
 
@@ -16,6 +17,7 @@ import Layout from '../layouts/Layout.astro';
     </div>
     <YieldForm client:load />
 	</main>
+  <Footer/>
 </Layout>
 
 <style>

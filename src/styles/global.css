@@ -85,3 +85,7 @@
 .card-hidden {
   opacity: 0;
 }
+
+a {
+  color: #6bd09e;
+}
