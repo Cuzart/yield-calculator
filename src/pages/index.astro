@@ -1,47 +1,47 @@
 ---
-"use client";
-import { InfoTooltip } from "@/components/InfoTooltip";
+'use client';
+import { InfoTooltip } from '@/components/InfoTooltip';
 import { YieldForm } from '@/components/YieldForm';
-import "@/styles/global.css";
+import '@/styles/global.css';
 import '@fontsource-variable/dm-sans';
 import Layout from '../layouts/Layout.astro';
-import {Footer} from '@/components/Footer/Footer';
-
+import { Footer } from '@/components/Footer/Footer';
 ---
 
-<Layout title="Sparrechner">
-	<main>
-		<div class="flex items-center justify-between">
-      <h1 >Sparrechner</h1>
-      <InfoTooltip  client:load text="Mit diesem Sparrechner kannst du deine Gewinne interaktiv bei gleichbleibender Rendite über eine von dir angegebene Laufzeit simulieren. Die Zinsen berücksichtigen die monatliche Sparrate und werden jeweils nach einem Jahr gut geschrieben. Dabei wird von einer thessaurierenden Anlageform ausgegangen." />
+<Layout title='Sparrechner'>
+  <main>
+    <div class='flex items-center justify-between'>
+      <h1>Sparrechner</h1>
+      <InfoTooltip
+        client:load
+        text='Mit diesem Sparrechner kannst du deine Gewinne interaktiv bei gleichbleibender Rendite über eine von dir angegebene Laufzeit simulieren. Die Zinsen berücksichtigen die monatliche Sparrate und werden jeweils nach einem Jahr gut geschrieben. Dabei wird von einer thessaurierenden Anlageform ausgegangen.'
+      />
     </div>
     <YieldForm client:load />
-	</main>
-  <Footer/>
+  </main>
+  <Footer />
 </Layout>
 
 <style>
-
   .flex {
     margin: 30px auto;
-  } 
+  }
   h1 {
-		font-size: 2.5rem;
-		font-weight: 500;
-		line-height: 1;
-		text-align: center;
+    font-size: 2.5rem;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
     color: inherit;
     margin-right: 1rem;
-	}
-	main {
-		margin: auto;
-		padding: 1rem;
-		width: 800px;
-		max-width: calc(100% - 2rem);
-		font-size: 20px;
-		line-height: 1.6;
+  }
+  main {
+    margin: auto;
+    padding: 1rem;
+    /* width: 800px; */
+    max-width: min(1200px, calc(100% - 2rem));
+    font-size: 20px;
+    line-height: 1.6;
     min-height: 100vh;
     font-family: 'DM Sans Variable', sans-serif;
-	}
-
+  }
 </style>

@@ -51,17 +51,17 @@ export const CalculationCard = ({
       </Card>
 
       <TooltipProvider>
-        <Card style={{ margin: '10px 0px' }}>
+        <Card className='my-3 flex-grow'>
           <CardHeader>
             <CardTitle>Deine Prognosse</CardTitle>
           </CardHeader>
           <CardContent>
             <div className='mb-8 grid xs:grid-cols-1 sm:grid-cols-3 sm:grid-rows-1 gap-4'>
               <Card>
-                <CardHeader className='pb-0'>
+                <CardHeader className='p-3 pb-0'>
                   <CardTitle className='text-sm'>Gesamt</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className='p-3 overflow-clip'>
                   <Tooltip>
                     <TooltipTrigger
                       onClick={(e) => {
@@ -88,10 +88,10 @@ export const CalculationCard = ({
                 </CardContent>
               </Card>
               <Card>
-                <CardHeader className='pb-0'>
+                <CardHeader className='p-3 pb-0'>
                   <CardTitle className='text-sm '>Zinsen</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className='p-3 overflow-clip'>
                   <Tooltip>
                     <TooltipTrigger
                       onClick={(e) => {
@@ -151,10 +151,10 @@ export const CalculationCard = ({
                 </CardContent>
               </Card>
               <Card>
-                <CardHeader className='pb-0'>
+                <CardHeader className='p-3 pb-0'>
                   <CardTitle className='text-sm'>Eingezahlt</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className='p-3 overflow-clip'>
                   <Tooltip>
                     <TooltipTrigger
                       onClick={(e) => {
@@ -163,7 +163,7 @@ export const CalculationCard = ({
                       }}
                     >
                       <CountUp
-                        className='text-xl font-black line-clamp-1'
+                        className='text-xl font-black line-clamp-1 '
                         start={prevResult.current - prevInterestSum.current}
                         end={debouncedResult - debouncedInterestSum}
                         duration={0.8}
